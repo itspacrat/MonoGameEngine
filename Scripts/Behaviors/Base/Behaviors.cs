@@ -222,5 +222,15 @@ namespace MonoGame_Core.Scripts
                 SceneManager.ChangeScene(new TestScene());
             }
         }
+
+        public static void DragDrop(float dt, GameObject go, Component[] c = null) {
+ 
+            Transform tform = (Transform)go.GetComponent("transform");
+            Collider dragCollider = (Collider)go.GetComponent("dragCollider");
+            Vector2 mousePos = InputManager.MousePos;
+            if (InputManager.IsPressed(InputManager.MouseKeys.Left) &&
+            dragCollider.ContainsPoint(mousePos))
+                tform.SetPosition(mousePos);
+        }
     }
 }

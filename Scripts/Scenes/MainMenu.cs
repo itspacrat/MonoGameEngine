@@ -38,11 +38,19 @@ namespace MonoGame_Core.Scripts
             InitGameObject(new Button("PlayBtn", "SelPlayBtn", "PlayButton", new Vector2(500, 100), 1, Behaviors.LoadSceneOnClick));
             InitGameObject(new Button("ExitBtn", "SelExitBtn", "QuitButton", new Vector2(500, -20), 1, Behaviors.QuitOnClick));
             InitGameObject(new Button("SettingsBtn", "SelSettingsBtn", "SettingsButton", new Vector2(500, 40), 1, null));
-            InitGameObject(new Switch("SwitchOn", "SwitchOff","NoNameSwitch", new Vector2(500, 160), 1, Behaviors.SwitchOnClick));
             
             // hybrid dead hover button + switch combo
-            InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","ComplexSwitchBase", new Vector2(500, 220), 1, Behaviors.OnClickTemplate)); // for implementation purposes; you can also pass null here
-            InitGameObject(new Switch("SwitchOn", "SwitchOff","ComplexSwitch", new Vector2(500, 220), 1, Behaviors.SwitchOnClick)); // TODO make this relative to switch base
+            InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","ComplexSwitchBase", new Vector2(500, 160), 1, Behaviors.OnClickTemplate)); // for implementation purposes; you can also pass null here
+            InitGameObject(new Switch("SwitchOn", "SwitchOff","ComplexSwitch", new Vector2(500, 160), 1, Behaviors.SwitchOnClick)); // TODO make this relative to switch base
+
+            // 
+            //InitGameObject(new WorldObject("SwitchBaseDeselected","DraggableThing", new String[] {"drag"},new Vector2(500, 220), 1));
+            InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","DraggableThing", new Vector2(500, 220), 1, Behaviors.OnClickTemplate));
+            WorldObject draggy = (WorldObject)GetObjectByName("DraggableThing");
+            draggy.AddComponent(new CollisionBox(draggy,"dragCollider",false,ResourceManager.GetTextureSize("SwitchBaseDeselected")));
+            draggy.AddBehavior("DraggableThing",Behaviors.DragDrop,new Component[] {draggy.GetComponent("transform"),null,draggy.GetComponent("dragCollider")});
+            
+
         }
 
         public override void Update(float dt)
