@@ -60,8 +60,6 @@ namespace MonoGame_Core.Scripts
             sld.AddComponent(new  CollisionBox(sld,"myBox",false,ResourceManager.GetTextureSize("SliderBase")));
             sldbit.AddComponent(new  CollisionBox(sldbit,"myBox",false,ResourceManager.GetTextureSize("SliderBitDeselected")));
 
-            sldbit.AddBehavior("Hover",Behaviors.ButtonSwapImagesOnHover,new Component[] {sld.GetComponent()});
-
 
         }
 
