@@ -84,6 +84,29 @@ namespace MonoGame_Core.Scripts
             return false;
         }
 
+        /// <summary>
+        /// EXPERIMENTAL -Blake
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool IsReleased(MouseKeys b)
+        {
+            if (b == MouseKeys.Left)
+            {
+                return !(mouseState.LeftButton == ButtonState.Pressed) && !(prevMouseState.LeftButton != ButtonState.Pressed);
+            }
+            else if (b == MouseKeys.Right)
+            {
+                return !(mouseState.RightButton == ButtonState.Pressed) && !(prevMouseState.RightButton != ButtonState.Pressed);
+            }
+            else if (b == MouseKeys.Middle)
+            {
+                return !(mouseState.MiddleButton == ButtonState.Pressed) && !(prevMouseState.MiddleButton != ButtonState.Pressed);
+            }
+
+            return false;
+        }
+
         public static void Initilize()
         {
             keyboardState = new KeyboardState();
