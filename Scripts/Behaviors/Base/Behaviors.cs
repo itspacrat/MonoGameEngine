@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Core.Scripts.GameObjects.Base.UI;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -146,27 +147,6 @@ namespace MonoGame_Core.Scripts
             else
                 ((WorldObject)b.GameObject).SpriteRenderer.Texture = b.DeselectedTexID;
         }
-        /// <summary>
-        /// highlights the base of a switch when the mouse hovers over it
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="gameObject"></param>
-        /// <param name="c"></param>
-        public static void SwitchSwapImagesOnHover(GameObject gameObject)
-        {
-            Collider collider = (Collider)gameObject.GetComponent("myBox");
-            SwitchData switchData = (SwitchData)gameObject.GetComponent("switchData");
-            Vector2 v = InputManager.MousePos;
-
-            if (collider.ContainsPoint(v))
-            {
-                ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOnTexID;
-            }
-            else
-            {
-                ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOffTexID;
-            }
-        }
 
         public static void SwitchOnClick(float dt, GameObject gameObject, Component[] c = null)
         {
@@ -190,16 +170,17 @@ namespace MonoGame_Core.Scripts
                     ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOffTexID;
                 }
             }
-
         }
 
-        public static void OnClickTemplate(float dt, GameObject go, Component[] c = null) {
+        public static void OnClickTemplate(float dt, GameObject go, Component[] c = null)
+        {
             Collider col = (Collider)go.GetComponent("myBox");
             Vector2 v = InputManager.MousePos;
             if (InputManager.IsTriggered(InputManager.MouseKeys.Left) &&
-                col.ContainsPoint(v)) {
-                    // don't do anything, this is a dead button
-                }
+                col.ContainsPoint(v))
+            {
+                // don't do anything, this is a dead button
+            }
         }
 
         public static void QuitOnClick(float dt, GameObject go, Component[] c = null)
@@ -223,14 +204,29 @@ namespace MonoGame_Core.Scripts
             }
         }
 
-        public static void DragDrop(float dt, GameObject go, Component[] c = null) {
- 
+        public static void DragDrop(float dt, GameObject go, Component[] c = null)
+        {
+
             Transform tform = (Transform)go.GetComponent("transform");
             Collider dragCollider = (Collider)go.GetComponent("dragCollider");
             Vector2 mousePos = InputManager.MousePos;
             if (InputManager.IsPressed(InputManager.MouseKeys.Left) &&
             dragCollider.ContainsPoint(mousePos))
                 tform.SetPosition(mousePos);
+        }
+        
+        /// <summary>
+        /// Base object goes into arg objs[0], and bit object goes into objs[1]
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="objs"></param>
+        /// <param name="c"></param>
+        public static void SliderBit(float dt, GameObject[] objs, Component[] c=null) {
+            Slider Base = (Slider) objs[0];
+            Button Bit = (Button) objs[1];
+
+            
+
         }
     }
 }
