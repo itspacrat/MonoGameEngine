@@ -1,8 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using MonoGame_Core.Scripts.GameObjects.Base.UI;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonoGame_Core.Scripts
@@ -77,8 +79,7 @@ namespace MonoGame_Core.Scripts
             rb.MoveVelocity = v;
             rb.AngularVelocity = r;
 
-            //((Transform)go.GetComponent("transform")).Move(v);
-            //((Transform)go.GetComponent("transform")).Rotate(r);
+            
         }
 
         public static void ManualScale(float dt, GameObject go, Component[] c = null)
@@ -146,27 +147,6 @@ namespace MonoGame_Core.Scripts
             else
                 ((WorldObject)b.GameObject).SpriteRenderer.Texture = b.DeselectedTexID;
         }
-        /// <summary>
-        /// highlights the base of a switch when the mouse hovers over it
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="gameObject"></param>
-        /// <param name="c"></param>
-        public static void SwitchSwapImagesOnHover(GameObject gameObject)
-        {
-            Collider collider = (Collider)gameObject.GetComponent("myBox");
-            SwitchData switchData = (SwitchData)gameObject.GetComponent("switchData");
-            Vector2 v = InputManager.MousePos;
-
-            if (collider.ContainsPoint(v))
-            {
-                ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOnTexID;
-            }
-            else
-            {
-                ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOffTexID;
-            }
-        }
 
         public static void SwitchOnClick(float dt, GameObject gameObject, Component[] c = null)
         {
@@ -190,16 +170,17 @@ namespace MonoGame_Core.Scripts
                     ((WorldObject)switchData.GameObject).SpriteRenderer.Texture = switchData.SwitchOffTexID;
                 }
             }
-
         }
 
-        public static void OnClickTemplate(float dt, GameObject go, Component[] c = null) {
+        public static void OnClickTemplate(float dt, GameObject go, Component[] c = null)
+        {
             Collider col = (Collider)go.GetComponent("myBox");
             Vector2 v = InputManager.MousePos;
             if (InputManager.IsTriggered(InputManager.MouseKeys.Left) &&
-                col.ContainsPoint(v)) {
-                    // don't do anything, this is a dead button
-                }
+                col.ContainsPoint(v))
+            {
+                // don't do anything, this is a dead sample button
+            }
         }
 
         public static void QuitOnClick(float dt, GameObject go, Component[] c = null)
@@ -223,14 +204,55 @@ namespace MonoGame_Core.Scripts
             }
         }
 
-        public static void DragDrop(float dt, GameObject go, Component[] c = null) {
- 
-            Transform tform = (Transform)go.GetComponent("transform");
-            Collider dragCollider = (Collider)go.GetComponent("dragCollider");
+        public static void DragDrop(float dt, GameObject go, Component[] c = null)
+        {
+            Transform dragT = (Transform)go.GetComponent("transform");
+            ButtonData dragD = (ButtonData) go.GetComponent("buttonData");
+            Collider dragC = (Collider)go.GetComponent("myBox");
             Vector2 mousePos = InputManager.MousePos;
-            if (InputManager.IsPressed(InputManager.MouseKeys.Left) &&
-            dragCollider.ContainsPoint(mousePos))
-                tform.SetPosition(mousePos);
+
+            if (InputManager.IsTriggered(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos))
+                dragD.Holding = true;
+            // mainly used for example
+            if (InputManager.IsReleased(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos))
+                dragD.Holding = false;
+            // do the thing
+            if (dragD.Holding)
+                dragT.SetPosition(mousePos);
+        }
+        
+        /// <summary>
+        /// Uses a Slider's Data (c[0]) and Transform (c[1]) to constrain a SliderBit
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="go"></param>
+        /// <param name="c">
+        /// c[0] should be the base's <see cref="SliderData"/>,<br />
+        /// c[1] should be the base's Transform,<br />
+        /// c[2] should be the base's Collider.
+        /// </param>
+        public static void RestrictToSlider(float dt, GameObject go, Component[] c=null) {
+
+            Transform bitTF = (Transform) go.GetComponent("transform");
+            Transform baseTF = (Transform) c[1];
+
+            Collider bitCol = (Collider) go.GetComponent("myBox");
+            Collider baseCol = (Collider) c[2];
+
+            ButtonData bitData = (ButtonData) go.GetComponent("buttonData");
+            SliderData baseData = (SliderData) c[0];
+
+            //Vector2 mousePos = InputManager.MousePos;
+
+            if (baseCol.ContainsPoint(bitTF.Position)) {
+                // if the bit's on the slider, dont complain
+            } else {
+                // else, freak the fuck out and put it back where it goes REEEEEEEEEEEEEEEEEEEEEE
+                bitTF.SetPosition( new Vector2(0,0));
+
+            }
+
+            
         }
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Media;
-
+using MonoGame_Core.Scripts.GameObjects.Base.UI;
 
 namespace MonoGame_Core.Scripts
 {
@@ -29,10 +29,16 @@ namespace MonoGame_Core.Scripts
             ResourceManager.AddTexture("SwitchBaseSelected", "Images/Default UI/switch_base_sel");
             ResourceManager.AddTexture("SwitchOn", "Images/Default UI/switch_on");
             ResourceManager.AddTexture("SwitchOff", "Images/Default UI/switch_off");
+            // load the slider test textures
+            ResourceManager.AddTexture("SliderBase", "Images/Default UI/slider");
+            ResourceManager.AddTexture("SliderBitDeselected", "Images/Default UI/slider_bit");
+            ResourceManager.AddTexture("SliderBitSelected", "Images/Default UI/slider_bit_sel");
+
         }
 
         protected override void loadObjects()
         {
+
             gameObjects = new List<GameObject>();
 
             InitGameObject(new Button("PlayBtn", "SelPlayBtn", "PlayButton", new Vector2(500, 100), 1, Behaviors.LoadSceneOnClick));
@@ -42,15 +48,20 @@ namespace MonoGame_Core.Scripts
             // hybrid dead hover button + switch combo
             InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","ComplexSwitchBase", new Vector2(500, 160), 1, Behaviors.OnClickTemplate)); // for implementation purposes; you can also pass null here
             InitGameObject(new Switch("SwitchOn", "SwitchOff","ComplexSwitch", new Vector2(500, 160), 1, Behaviors.SwitchOnClick)); // TODO make this relative to switch base
-
-            // 
-            //InitGameObject(new WorldObject("SwitchBaseDeselected","DraggableThing", new String[] {"drag"},new Vector2(500, 220), 1));
+            
             InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","DraggableThing", new Vector2(500, 220), 1, Behaviors.OnClickTemplate));
             WorldObject draggy = (WorldObject)GetObjectByName("DraggableThing");
-            draggy.AddComponent(new CollisionBox(draggy,"dragCollider",false,ResourceManager.GetTextureSize("SwitchBaseDeselected")));
-            draggy.AddBehavior("DraggableThing",Behaviors.DragDrop,new Component[] {draggy.GetComponent("transform"),null,draggy.GetComponent("dragCollider")});
-            
+            draggy.AddBehavior("DraggableThing",Behaviors.DragDrop,new Component[] {draggy.GetComponent("transform"),draggy.GetComponent("myBox")});
 
+            InitGameObject(new Slider("SliderBase","testslider",new Vector2(-200,100),0,100,1,null));
+            Slider sld = (Slider)GetObjectByName("testslider") ;
+            InitGameObject(new Button("SliderBitDeselected","SliderBitSelected","testsliderbit",new Vector2(-200,50),1,null));
+            Button sldbit = (Button)GetObjectByName("testsliderbit");
+
+            sldbit.AddBehavior("Drag",Behaviors.DragDrop,new Component[] {});
+            //sldbit.AddBehavior("Slider",Behaviors.RestrictToSlider,new Component[] {sld.GetComponent("sliderData"),sld.GetComponent("transform"),sld.GetComponent("myBox")});
+            ((Transform)sldbit.GetComponent("transform")).Attach((Transform)sld.GetComponent("transform"));
+            
         }
 
         public override void Update(float dt)
