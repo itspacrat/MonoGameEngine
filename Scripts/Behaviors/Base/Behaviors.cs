@@ -206,26 +206,53 @@ namespace MonoGame_Core.Scripts
 
         public static void DragDrop(float dt, GameObject go, Component[] c = null)
         {
-
             Transform dragT = (Transform)go.GetComponent("transform");
             ButtonData dragD = (ButtonData) go.GetComponent("buttonData");
             Collider dragC = (Collider)go.GetComponent("myBox");
             Vector2 mousePos = InputManager.MousePos;
 
-            if (InputManager.IsTriggered(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos)) {
+            if (InputManager.IsTriggered(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos))
                 dragD.Holding = true;
-            }
-            
             // mainly used for example
-            if (InputManager.IsReleased(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos)) {
+            if (InputManager.IsReleased(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos))
                 dragD.Holding = false;
-                
-            }
-            if (dragD.Holding) {
+            // do the thing
+            if (dragD.Holding)
                 dragT.SetPosition(mousePos);
-            }
         }
         
-        
+        /// <summary>
+        /// Uses a Slider's Data (c[0]) and Transform (c[1]) to constrain a SliderBit
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="go"></param>
+        /// <param name="c">
+        /// c[0] should be the base's <see cref="SliderData"/>,<br />
+        /// c[1] should be the base's Transform,<br />
+        /// c[2] should be the base's Collider.
+        /// </param>
+        public static void RestrictToSlider(float dt, GameObject go, Component[] c=null) {
+
+            Transform bitTF = (Transform) go.GetComponent("transform");
+            Transform baseTF = (Transform) c[1];
+
+            Collider bitCol = (Collider) go.GetComponent("myBox");
+            Collider baseCol = (Collider) c[2];
+
+            ButtonData bitData = (ButtonData) go.GetComponent("buttonData");
+            SliderData baseData = (SliderData) c[0];
+
+            //Vector2 mousePos = InputManager.MousePos;
+
+            if (baseCol.ContainsPoint(bitTF.Position)) {
+                // if the bit's on the slider, dont complain
+            } else {
+                // else, freak the fuck out and put it back where it goes REEEEEEEEEEEEEEEEEEEEEE
+                bitTF.SetPosition( new Vector2(0,0));
+
+            }
+
+            
+        }
     }
 }

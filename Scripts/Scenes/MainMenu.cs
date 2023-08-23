@@ -51,16 +51,21 @@ namespace MonoGame_Core.Scripts
             
             InitGameObject(new Button("SwitchBaseDeselected", "SwitchBaseSelected","DraggableThing", new Vector2(500, 220), 1, Behaviors.OnClickTemplate));
             WorldObject draggy = (WorldObject)GetObjectByName("DraggableThing");
-            draggy.AddComponent(new CollisionBox(draggy,"dragCollider",false,ResourceManager.GetTextureSize("SwitchBaseDeselected")));
-            draggy.AddBehavior("DraggableThing",Behaviors.DragDrop,new Component[] {draggy.GetComponent("transform"),draggy.GetComponent("dragCollider")});
+            draggy.AddBehavior("DraggableThing",Behaviors.DragDrop,new Component[] {draggy.GetComponent("transform"),draggy.GetComponent("myBox")});
 
-            Slider sld = new Slider("SliderBase","testslider",new Vector2(-200,100),1,null);
-            Button sldbit = new Button("SliderBitDeselected","SliderBitSelected","testsliderbit",new Vector2(-200,100),1,null);
+            InitGameObject(new Slider("SliderBase","testslider",new Vector2(-200,100),0,100,1,null));
+            Slider sld = (Slider)GetObjectByName("testslider") ;
+            InitGameObject(new Button("SliderBitDeselected","SliderBitSelected","testsliderbit",new Vector2(-200,50),1,null));
+            Button sldbit = (Button)GetObjectByName("testsliderbit");
 
-            sld.AddComponent(new  CollisionBox(sld,"myBox",false,ResourceManager.GetTextureSize("SliderBase")));
-            sldbit.AddComponent(new  CollisionBox(sldbit,"myBox",false,ResourceManager.GetTextureSize("SliderBitDeselected")));
+            sldbit.AddBehavior("Drag",Behaviors.DragDrop,new Component[] {});
+            sldbit.AddBehavior("Slider",Behaviors.RestrictToSlider,new Component[] {sld.GetComponent("sliderData"),sld.GetComponent("transform"),sld.GetComponent("myBox")});
 
+            
 
+            //((Transform) sldbit.GetComponent("transform")).Attach((Transform) sld.GetComponent("transform"));
+            //sldbit.AddBehavior("Slide", Behaviors.RestrictToSlider,new Component[] {sld.GetComponent("sliderData"),sld.GetComponent("transform")});
+            
         }
 
         public override void Update(float dt)
