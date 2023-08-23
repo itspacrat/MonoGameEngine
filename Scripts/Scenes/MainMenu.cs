@@ -63,18 +63,5 @@ namespace MonoGame_Core.Scripts
             ((Transform)sldbit.GetComponent("transform")).Attach((Transform)sld.GetComponent("transform"));
             
         }
-
-        public override void Update(float dt)
-        {
-            if (SceneManager.SceneState == SceneManager.State.Running)
-            {
-                KeyboardState state = Keyboard.GetState();
-                if (state.GetPressedKeys().Length > 0)
-                {
-                    SceneManager.ChangeScene(new TestScene());
-                }
-            }
-            base.Update(dt);
-        }
     }
 }
