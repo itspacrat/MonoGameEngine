@@ -7,7 +7,12 @@ namespace MonoGame_Core.Scripts
 {
     public class Button : WorldObject
     {
-        public Button(string deselectedTexture, string selectedTexture, string name, Vector2 pos, byte layer, BehaviorHandler.Act onClick) : base(deselectedTexture, name, new string[] { "button" }, pos, layer)
+        public Button(
+            string deselectedTexture,
+            string selectedTexture, 
+            string name, 
+            Vector2 pos, 
+            byte layer, BehaviorHandler.Act onClick) : base(deselectedTexture, name, new string[] { "button" }, pos, layer)
         {
             SpriteRenderer.IsHUD = true;
             CollisionBox cb = (CollisionBox)componentHandler.Add(new CollisionBox(this, "myBox", true, ResourceManager.GetTextureSize(deselectedTexture)));
