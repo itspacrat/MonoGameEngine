@@ -4,6 +4,7 @@ using MonoGame_Core.Scripts.GameObjects.Base.UI;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Text;
 
 namespace MonoGame_Core.Scripts
@@ -78,8 +79,7 @@ namespace MonoGame_Core.Scripts
             rb.MoveVelocity = v;
             rb.AngularVelocity = r;
 
-            //((Transform)go.GetComponent("transform")).Move(v);
-            //((Transform)go.GetComponent("transform")).Rotate(r);
+            
         }
 
         public static void ManualScale(float dt, GameObject go, Component[] c = null)
@@ -179,7 +179,7 @@ namespace MonoGame_Core.Scripts
             if (InputManager.IsTriggered(InputManager.MouseKeys.Left) &&
                 col.ContainsPoint(v))
             {
-                // don't do anything, this is a dead button
+                // don't do anything, this is a dead sample button
             }
         }
 
@@ -207,26 +207,25 @@ namespace MonoGame_Core.Scripts
         public static void DragDrop(float dt, GameObject go, Component[] c = null)
         {
 
-            Transform tform = (Transform)go.GetComponent("transform");
-            Collider dragCollider = (Collider)go.GetComponent("dragCollider");
+            Transform dragT = (Transform)go.GetComponent("transform");
+            ButtonData dragD = (ButtonData) go.GetComponent("buttonData");
+            Collider dragC = (Collider)go.GetComponent("myBox");
             Vector2 mousePos = InputManager.MousePos;
-            if (InputManager.IsPressed(InputManager.MouseKeys.Left) &&
-            dragCollider.ContainsPoint(mousePos))
-                tform.SetPosition(mousePos);
+
+            if (InputManager.IsTriggered(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos)) {
+                dragD.Holding = true;
+            }
+            
+            // mainly used for example
+            if (InputManager.IsReleased(InputManager.MouseKeys.Left) && dragC.ContainsPoint(mousePos)) {
+                dragD.Holding = false;
+                
+            }
+            if (dragD.Holding) {
+                dragT.SetPosition(mousePos);
+            }
         }
         
-        /// <summary>
-        /// Base object goes into arg objs[0], and bit object goes into objs[1]
-        /// </summary>
-        /// <param name="dt"></param>
-        /// <param name="objs"></param>
-        /// <param name="c"></param>
-        public static void SliderBit(float dt, GameObject[] objs, Component[] c=null) {
-            Slider Base = (Slider) objs[0];
-            Button Bit = (Button) objs[1];
-
-            
-
-        }
+        
     }
 }
