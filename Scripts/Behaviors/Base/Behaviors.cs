@@ -241,6 +241,8 @@ namespace MonoGame_Core.Scripts
         /// </param>
         public static void RestrictToSlider(float dt, GameObject go, Component[] c=null) {
 
+            Vector2 mousePos = InputManager.MousePos;
+
             Transform bitTF = (Transform) go.GetComponent("transform");
             Transform baseTF = (Transform) c[1];
 
@@ -250,17 +252,9 @@ namespace MonoGame_Core.Scripts
             ButtonData bitData = (ButtonData) go.GetComponent("buttonData");
             SliderData baseData = (SliderData) c[0];
 
-            //Vector2 mousePos = InputManager.MousePos;
-
-            if (baseCol.ContainsPoint(bitTF.Position)) {
-                // if the bit's on the slider, dont complain
-            } else {
-                // else, freak the fuck out and put it back where it goes REEEEEEEEEEEEEEEEEEEEEE
-                bitTF.SetPosition( new Vector2(0,0));
-
+            if (baseCol.ContainsPoint(bitTF.Position) && baseCol.ContainsPoint(mousePos) && InputManager.IsPressed(InputManager.MouseKeys.Left)) {
+                bitTF.SetPosition(new Vector2((mousePos.X-baseTF.Position.X),(mousePos.Y-baseTF.Position.Y)));
             }
-
-            
         }
     }
 }

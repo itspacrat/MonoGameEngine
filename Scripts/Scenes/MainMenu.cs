@@ -55,12 +55,12 @@ namespace MonoGame_Core.Scripts
 
             InitGameObject(new Slider("SliderBase","testslider",new Vector2(-200,100),0,100,1,null));
             Slider sld = (Slider)GetObjectByName("testslider") ;
-            InitGameObject(new Button("SliderBitDeselected","SliderBitSelected","testsliderbit",new Vector2(-200,50),1,null));
+            InitGameObject(new Button("SliderBitDeselected","SliderBitSelected","testsliderbit",new Vector2(-200,100),1,null));
             Button sldbit = (Button)GetObjectByName("testsliderbit");
 
-            sldbit.AddBehavior("Drag",Behaviors.DragDrop,new Component[] {});
-            //sldbit.AddBehavior("Slider",Behaviors.RestrictToSlider,new Component[] {sld.GetComponent("sliderData"),sld.GetComponent("transform"),sld.GetComponent("myBox")});
-            ((Transform)sldbit.GetComponent("transform")).Attach((Transform)sld.GetComponent("transform"));
+            //sldbit.AddBehavior("Drag",Behaviors.DragDrop,new Component[] {});
+            sldbit.AddBehavior("Slider",Behaviors.RestrictToSlider,new Component[] {sld.GetComponent("sliderData"),sld.GetComponent("transform"),sld.GetComponent("myBox")});
+            ((Transform)sldbit.GetComponent("transform")).Attach((Transform)sld.GetComponent("transform"),false);
             
         }
     }
